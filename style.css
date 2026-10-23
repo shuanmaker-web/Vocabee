@@ -588,3 +588,12 @@ body[data-bank] .stat,body[data-bank] .mode b{color:inherit}
 #bankswitch:empty{display:none}
 #app{padding-top:calc(10px + env(safe-area-inset-top))}
 body.in-session #app{padding-top:0}
+
+/* ===== Vocabee landing / home page ===== */
+.vland{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:24px 20px calc(48px + env(safe-area-inset-bottom));background:var(--bg)}
+.vland-top{position:absolute;top:calc(14px + env(safe-area-inset-top));right:16px}
+.vland-bees{width:min(90%,440px);height:auto;filter:drop-shadow(4px 6px 0 rgba(26,26,26,.12))}
+.vland-brand{font-size:3.1rem;font-weight:900;color:var(--page);letter-spacing:1px;line-height:1;margin-top:6px}
+.vland-sub{font-size:1.2rem;font-weight:800;letter-spacing:4px;color:var(--ink);margin-top:2px}
+.vland-start{max-width:300px;width:80%;margin-top:24px;font-size:1.3rem;font-weight:900;padding:16px 24px;border:3px solid #1a1a1a;border-radius:16px;box-shadow:5px 5px 0 #1a1a1a;background:var(--page);color:#1a1a1a}
+.vland-start:active{transform:translate(3px,3px);box-shadow:2px 2px 0 #1a1a1a}

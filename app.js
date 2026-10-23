@@ -320,11 +320,13 @@ function circleBtn(bank) {
 }
 function renderLanding() {
   app.innerHTML = `${iosHint()}
-    <div class="land">
-      <div class="land-top"><div class="row" style="gap:8px">${examLine()}</div></div>
-      <img class="land-logo" src="icons/logo.png" alt="Vocaboo" draggable="false">
-      <div class="duo-img"><img src="icons/landing-duo.png" alt="學測單字表、字彙王 Level 3-5" draggable="false"><button class="hit hit-gsat" data-enter="gsat" aria-label="學測單字表"></button><button class="hit hit-material" data-enter="material" aria-label="字彙王 Level 3-5"></button></div>
-      ${store.volatile ? '<p class="small" style="color:#fff"><b>⚠ 此瀏覽器無法儲存資料,關閉後進度會消失</b></p>' : ''}
+    <div class="vland">
+      <div class="vland-top">${examLine()}</div>
+      <img class="vland-bees" src="icons/landing-bees.png" alt="Vocabee" draggable="false">
+      <h1 class="vland-brand">Vocabee</h1>
+      <p class="vland-sub">國中英文單字</p>
+      <button class="btn vland-start" data-enter="jhs">開始學習 🐝</button>
+      ${store.volatile ? '<p class="small" style="color:var(--bad)"><b>⚠ 此瀏覽器無法儲存資料,關閉後進度會消失</b></p>' : ''}
     </div>`;
 }
 function renderHome() {
@@ -751,7 +753,6 @@ async function boot(reload = false) {
     noteAnswer(bk, wd, src, lg.correct === true || (lg.correct === undefined && lg.rating >= 3));
   }
   if (!reload) { await Promise.all([...Object.keys(BANKS).map(loadBank), loadQuestions()]); }
-  if (!S.bank) S.bank = Object.keys(BANKS)[0];
   S.qstats = await store.allQ();
   render();
 }
