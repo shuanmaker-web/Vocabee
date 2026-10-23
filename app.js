@@ -322,8 +322,8 @@ function renderLanding() {
   app.innerHTML = `${iosHint()}
     <div class="vland">
       <div class="vland-top">${examLine()}</div>
-      <img class="vland-bees" src="icons/landing-bees.png" alt="Vocabee" draggable="false">
-      <h1 class="vland-brand">Vocabee</h1>
+      <img class="vland-logo" src="icons/logo.png" alt="Vocabee" draggable="false">
+      <img class="vland-bees" src="icons/landing-bees.png" alt="" draggable="false">
       <p class="vland-sub">國中英文單字</p>
       <button class="btn vland-start" data-enter="jhs">開始學習 🐝</button>
       ${store.volatile ? '<p class="small" style="color:var(--bad)"><b>⚠ 此瀏覽器無法儲存資料,關閉後進度會消失</b></p>' : ''}

@@ -597,3 +597,7 @@ body.in-session #app{padding-top:0}
 .vland-sub{font-size:1.2rem;font-weight:800;letter-spacing:4px;color:var(--ink);margin-top:2px}
 .vland-start{max-width:300px;width:80%;margin-top:24px;font-size:1.3rem;font-weight:900;padding:16px 24px;border:3px solid #1a1a1a;border-radius:16px;box-shadow:5px 5px 0 #1a1a1a;background:var(--page);color:#1a1a1a}
 .vland-start:active{transform:translate(3px,3px);box-shadow:2px 2px 0 #1a1a1a}
+
+/* Vocabee landing logo + smaller bees to fit with wordmark */
+.vland-logo{width:min(90%,460px);height:auto;margin-top:2px}
+.vland-bees{width:min(70%,330px)}
