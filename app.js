@@ -33,7 +33,7 @@ const store = (() => {
     try {
       if (!window.indexedDB) throw new Error('no idb');
       db = await new Promise((res, rej) => {
-        const o = indexedDB.open('vocab-app', 2);
+        const o = indexedDB.open('vocabee', 2);
         o.onupgradeneeded = () => {
           const d = o.result, has = n => d.objectStoreNames.contains(n);
           if (!has('cards')) d.createObjectStore('cards', { keyPath: 'id' });
