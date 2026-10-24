@@ -254,8 +254,8 @@ const starPts = (n, ro, ri) => Array.from({ length: n * 2 }, (_, i) => { const r
 const STAR5 = starPts(5, 11, 4.8), STAR8 = starPts(8, 11.5, 6.6);
 const TROPHY = '<g class="trophy"><path d="M7.5 3.5h9v6a4.5 4.5 0 0 1-9 0z"/><path class="hd" d="M7.5 5.5H4.6v1.8a3 3 0 0 0 3 3M16.5 5.5h2.9v1.8a3 3 0 0 1-3 3"/><rect x="10.8" y="13.6" width="2.4" height="3.4"/><rect x="7.8" y="17" width="8.4" height="3.4" rx="1"/><path class="sh" d="M10 6.2v3"/></g>';
 // honey pot: round belly, cream rim, one honey drip down the front and a short dipper. lv 1 = pale (little honey), lv 2 = golden (full)
-const POT_BODY = 'M5.2 8.4C2.3 10.4 1.6 14.4 3.4 17.6C5 20.4 8.4 21.5 12 21.5C15.6 21.5 19 20.4 20.6 17.6C22.4 14.4 21.7 10.4 18.8 8.4';
-const POT = lv => `<g class="hjar l${lv}"><path class="cb" d="${POT_BODY}z"/><path class="sd" d="M19.9 10.8c1.1 3 .7 5.9-1.1 8-1.6 1.8-3.9 2.5-6.1 2.6 3.9-.9 6.3-3.8 6.5-7.2z"/><path class="jo" d="${POT_BODY}"/><ellipse class="rim" cx="12" cy="7.4" rx="7.6" ry="2.9"/><ellipse class="op" cx="12" cy="7.5" rx="5.4" ry="1.55"/><path class="stk" d="M12.4 6.4L18.4 1.7"/><ellipse class="hd" cx="11" cy="6.3" rx="2.1" ry="1.25" transform="rotate(-25 11 6.3)"/><path class="dr" d="M7.6 8.6Q10.6 9.6 11.2 8.8V14a1.4 1.4 0 0 1-2.8 0V10.8Q8.2 9.6 7.6 8.6z"/></g>`;
+// answered-day icon: the owner's honey-pot picture (icons/honey-l2.png = golden, honey-l1.png = pale)
+const POT = lv => `<image href="icons/honey-l${lv}.png" x="3.4" y="1.4" width="17.2" height="21.9"/>`;
 const starCell = (k, n, cls, lv) => {
   const shape = cls.includes('exday') ? TROPHY : lv > 0 ? POT(lv) : '<circle class="c" cx="12" cy="12" r="9.5"/>';
   const mark = cls.includes('today') ? (lv > 0 ? '' : '<circle class="dot" cx="12" cy="12.6" r="3.4"/>') : '';
