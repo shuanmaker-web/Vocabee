@@ -258,7 +258,7 @@ const JAR_BODY = 'M7 5.6C7 8 3.6 9.4 3.6 14.6C3.6 19 7.2 21.4 12 21.4C16.8 21.4 
 const POT = lv => `<g class="hjar l${lv}"><path class="cb" d="${JAR_BODY}z"/><path class="jo" d="${JAR_BODY}"/><path class="sh" d="M5.9 14.2c.1-2 1-3.4 2.3-4.3"/><rect class="tp" x="5.4" y="2.8" width="13.2" height="2.8" rx="1.3"/><ellipse class="pool" cx="12" cy="3.2" rx="5.6" ry="1.3"/><path class="dr" d="M7.4 5.3v6.8a1.4 1.4 0 0 0 2.8 0V5.3z"/><path class="dr" d="M13.7 5.3v9.4a1.55 1.55 0 0 0 3.1 0V5.3z"/><path class="dr" d="M10.9 5.3v3.5a1.1 1.1 0 0 0 2.2 0V5.3z"/></g>`;
 const starCell = (k, n, cls, lv) => {
   const shape = cls.includes('exday') ? TROPHY : lv > 0 ? POT(lv) : '<circle class="c" cx="12" cy="12" r="9.5"/>';
-  const mark = cls.includes('today') ? (lv > 0 ? '<rect class="tdy" x="6" y="22.2" width="12" height="1.6" rx=".8"/>' : '<circle class="dot" cx="12" cy="12.6" r="3.4"/>') : '';
+  const mark = cls.includes('today') ? (lv > 0 ? '' : '<circle class="dot" cx="12" cy="12.6" r="3.4"/>') : '';
   return `<i class="${cls}" title="${k}${n == null ? '' : ': ' + n}"${lv == null ? '' : ` data-l="${lv}"`}><svg viewBox="0 0 24 24" aria-hidden="true">${shape}${mark}</svg></i>`;
 };
 function examLine() {
@@ -418,7 +418,7 @@ function applyTheme() {
   const mc = S.bank ? c : LAND;
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = mc;
 }
-const APP_VERSION = 'v12';
+const APP_VERSION = 'v13';
 function renderSettings() {
   const s = S.settings;
   const days = s.lastBackupAt ? Math.floor((Date.now() - s.lastBackupAt) / DAY) : null;
