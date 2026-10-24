@@ -1,4 +1,4 @@
-/* Vocaboo — flashcards / multiple choice / spelling with FSRS.
+/* Vocabee — multiple choice / spelling with FSRS.
    Two word banks: "gsat" (CEEC Level 1–6) and "material" (teacher's list). */
 'use strict';
 
@@ -323,9 +323,11 @@ function renderLanding() {
     <div class="vland">
       <div class="vland-top">${examLine()}</div>
       <img class="vland-logo" src="icons/logo.png" alt="Vocabee" draggable="false">
-      <img class="vland-bees" src="icons/landing-bees.png" alt="" draggable="false">
+      <button class="vland-beesbtn" data-enter="jhs" aria-label="開始學習">
+        <img class="vland-bees" src="icons/landing-bees.png" alt="" draggable="false">
+      </button>
       <p class="vland-sub">國中英文單字</p>
-      <button class="btn vland-start" data-enter="jhs">開始學習 🐝</button>
+      <p class="vland-tap">👆 點蜜蜂開始學習 🐝</p>
       ${store.volatile ? '<p class="small" style="color:var(--bad)"><b>⚠ 此瀏覽器無法儲存資料,關閉後進度會消失</b></p>' : ''}
     </div>`;
 }

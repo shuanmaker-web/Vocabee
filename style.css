@@ -242,7 +242,7 @@ body[data-bank="gsat"],button.card.bank.ac-gsat{--accent:var(--y);--accent-soft:
 
 /* ===== v5: blob faces, individual tab icons, consistent thick outlines ===== */
 :root{
-  --page:#FF5700;--bg:#f5ead6;--surface:#fffcf5;--ink:#1a1a1a;--muted:#6b5e50;--line:#d9c9a8;
+  --page:#FF9E2C;--bg:#f5ead6;--surface:#fffcf5;--ink:#1a1a1a;--muted:#6b5e50;--line:#d9c9a8;
   --blue:#2347f0;--yellow:#ffd200;--red:#ff3b1d;--green:#00b856;--pink:#ff6b9d;--orange:#ff8c1a;
   --accent:#2347f0;--accent-soft:#dde4ff;--accent-ink:#fff;
   --good:#00a34a;--good-soft:#d8f5e3;--bad:#e5270e;--bad-soft:#ffe0da;--warn:#d98e00;
@@ -479,11 +479,11 @@ body[data-bank] .mode:disabled{opacity:.55}
 body[data-bank] .chip.on{background:var(--yellow);color:#1a1a1a;border-color:#1a1a1a}
 
 /* ===== one orange everywhere (same as the home page) ===== */
-:root{--red:#FF5700;--orange:#FF5700;--accent:#FF5700;--accent-soft:#FFE3D3}
-body[data-bank]{--accent:#FF5700;--accent-soft:#FFE3D3;--accent-ink:#fff}
+:root{--red:#FF9E2C;--orange:#FF9E2C;--accent:#FF9E2C;--accent-soft:#FFE3D3}
+body[data-bank]{--accent:#FF9E2C;--accent-soft:#FFE3D3;--accent-ink:#fff}
 
 /* error / warning colors use the same orange; text inputs match the other fields */
-:root,body[data-bank]{--bad:#FF5700;--bad-soft:#FFE3D3;--warn:#FF5700}
+:root,body[data-bank]{--bad:#FF9E2C;--bad-soft:#FFE3D3;--warn:#FF9E2C}
 input[type=text],input[type=search]{max-width:150px;min-width:0;border:2.5px solid #1a1a1a;border-radius:14px;background:var(--surface);font:inherit;padding:8px 10px;color:var(--ink)}
 
 /* ===== compact multiple-choice question so the answer card fits on screen ===== */
@@ -595,9 +595,13 @@ body.in-session #app{padding-top:0}
 .vland-bees{width:min(90%,440px);height:auto;filter:drop-shadow(4px 6px 0 rgba(26,26,26,.12))}
 .vland-brand{font-size:3.1rem;font-weight:900;color:var(--page);letter-spacing:1px;line-height:1;margin-top:6px}
 .vland-sub{font-size:1.2rem;font-weight:800;letter-spacing:4px;color:var(--ink);margin-top:2px}
-.vland-start{max-width:300px;width:80%;margin-top:24px;font-size:1.3rem;font-weight:900;padding:16px 24px;border:3px solid #1a1a1a;border-radius:16px;box-shadow:5px 5px 0 #1a1a1a;background:var(--page);color:#1a1a1a}
-.vland-start:active{transform:translate(3px,3px);box-shadow:2px 2px 0 #1a1a1a}
-
-/* Vocabee landing logo + smaller bees to fit with wordmark */
+/* Vocabee landing logo + the bees are the "start" button */
 .vland-logo{width:min(90%,460px);height:auto;margin-top:2px}
-.vland-bees{width:min(70%,330px)}
+.vland-beesbtn{background:none;border:0;padding:0;margin:2px 0 0;cursor:pointer;display:block;line-height:0;border-radius:24px;animation:beebob 2.6s ease-in-out infinite}
+.vland-beesbtn:focus-visible{outline:3px solid var(--page);outline-offset:6px}
+.vland-beesbtn:active{animation:none;transform:scale(.95)}
+.vland-bees{width:min(74%,340px);height:auto;filter:drop-shadow(4px 6px 0 rgba(26,26,26,.14));pointer-events:none}
+.vland-tap{font-size:1.05rem;font-weight:800;color:var(--page);margin-top:14px;animation:tappulse 1.6s ease-in-out infinite}
+@keyframes beebob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes tappulse{0%,100%{opacity:.5;transform:translateY(0)}50%{opacity:1;transform:translateY(-2px)}}
+@media (prefers-reduced-motion:reduce){.vland-beesbtn,.vland-tap{animation:none}}
