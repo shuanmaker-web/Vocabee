@@ -8,8 +8,11 @@ Read `README.md` for the data format and credits.
 `verbs.js` generates 過去式/過去分詞 for the verb-forms drill (irregular table + regular rules).
 
 ## Live site
-- **Student URL:** https://shuanmaker-web.github.io/vocabee/
-- **Hosting:** GitHub Pages, repo `shuanmaker-web/vocabee`, source = branch `main`, folder `/`.
+- **Student URL:** https://shuanmaker-web.github.io/Vocabee/
+  ⚠️ **Path is case-sensitive — capital `Vocabee`.** The repo was renamed `vocabee` → `Vocabee`,
+  so the old lowercase `.../vocabee/` now 404s. Give students a clickable link / QR / home-screen
+  PWA, never a hand-typed URL. (Sister app Vocaboo's path stays lowercase — don't confuse them.)
+- **Hosting:** GitHub Pages, repo `shuanmaker-web/Vocabee`, source = branch `main`, folder `/`.
   Every push to `main` auto-rebuilds Pages (~1 min).
 - Vanilla static site — no build step/framework/bundler. The repo-root files ARE the site.
 
@@ -40,7 +43,7 @@ server, unrecoverable if corrupted. Keep any change to data shape, storage keys,
 - Both the top tiles and the 核心/基礎 bars use these; the mastered tile shows `/ total`.
 
 ## For a fresh Claude session
-- `add_repo(owner=shuanmaker-web, repo=vocabee, access=push)` then clone as instructed.
+- `add_repo(owner=shuanmaker-web, repo=Vocabee, access=push)` then clone as instructed.
 - `git fetch origin main && git reset --hard origin/main` before editing.
 - Preview via the built-in browser on the live URL, or `start.bat` locally (needs Python).
 
@@ -50,7 +53,7 @@ server, unrecoverable if corrupted. Keep any change to data shape, storage keys,
   deletes it manually on GitHub.
 
 ## Conventions
-- **Keep asset paths relative** (served from `/vocabee/` sub-path); `manifest` uses `./`.
+- **Keep asset paths relative** (served from `/Vocabee/` sub-path); `manifest` uses `./`.
 - Single bank is driven by `BANKS` (one entry with `levels:[1,2]`) + `LVLABELS`. New words are
   served in random order (avoids always starting at A). Theme color is `--page` (default `#FF9500`, THEMES.orange; Vocaboo uses `#FF5700`). Landing is a full-bleed darker orange (`--land` `#E56A00`). No landing page / no practice-question bank (removed vs Vocaboo).
 - Data source: 翰霖文教《國中基礎單字》(han-lin.tw) — non-commercial educational use, credited
