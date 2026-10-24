@@ -419,7 +419,7 @@ function applyTheme() {
   const mc = S.bank ? c : LAND;
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = mc;
 }
-const APP_VERSION = 'v4';
+const APP_VERSION = 'v5';
 function renderSettings() {
   const s = S.settings;
   const days = s.lastBackupAt ? Math.floor((Date.now() - s.lastBackupAt) / DAY) : null;
@@ -520,7 +520,7 @@ function vfBlock(w) {
   const head = `<div class="vf-h"><b>動詞三態</b><span class="muted small">原形 <b>${esc(v.f.base)}</b> → 過去式 → 過去分詞</span></div>`;
   if (!v.done) {
     return `<form id="vf-form" class="card vf" autocomplete="off">${head}${VF_ROWS.map(([k, lab]) => `<div class="vf-row"><span class="vf-lab">${lab}</span>
-      <div class="vf-btns">${[['same', 'same'], ['ed', '-ed'], ['d', '-d']].map(([x, t]) => `<button type="button" class="vfb" data-vfrow="${k}" data-vfsfx="${x}">${t}</button>`).join('')}</div>
+      <div class="vf-btns">${[['same', 'same']].map(([x, t]) => `<button type="button" class="vfb" data-vfrow="${k}" data-vfsfx="${x}">${t}</button>`).join('')}</div>
       <input class="field" data-vfin="${k}" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="輸入${lab}" aria-label="${lab}"></div>`).join('')}
       <div class="row" style="margin-top:12px"><button type="button" class="btn ghost" data-vfact="skip">跳過</button><button class="btn grow" type="submit">檢查三態</button></div></form>`;
   }
