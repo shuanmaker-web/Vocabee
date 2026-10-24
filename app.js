@@ -326,7 +326,6 @@ function renderLanding() {
       <button class="vland-beesbtn" data-enter="jhs" aria-label="開始學習">
         <img class="vland-bees" src="icons/landing-bees.png" alt="" draggable="false">
       </button>
-      <p class="vland-sub">國中英文單字</p>
       ${store.volatile ? '<p class="small" style="color:var(--bad)"><b>⚠ 此瀏覽器無法儲存資料,關閉後進度會消失</b></p>' : ''}
     </div>`;
 }
@@ -401,14 +400,14 @@ function renderProgress() {
   app.innerHTML = html;
 }
 
-const THEMES = { orange: ['琥珀', '#FF9E2C'], blue: ['藍', '#3D8BFF'], purple: ['紫', '#9B6BFF'], pink: ['粉', '#FF4F9A'], teal: ['青', '#12B8CC'] };
-const BRAND = '#FF9E2C';
+const THEMES = { orange: ['琥珀', '#FF9500'], blue: ['藍', '#3D8BFF'], purple: ['紫', '#9B6BFF'], pink: ['粉', '#FF4F9A'], teal: ['青', '#12B8CC'] };
+const BRAND = '#FF9500';
 function applyTheme() {
   const c = S.bank ? (THEMES[S.settings.theme] || THEMES.orange)[1] : BRAND;
   document.documentElement.style.setProperty('--page', c);
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = c;
 }
-const APP_VERSION = 'v2';
+const APP_VERSION = 'v3';
 function renderSettings() {
   const s = S.settings;
   const days = s.lastBackupAt ? Math.floor((Date.now() - s.lastBackupAt) / DAY) : null;

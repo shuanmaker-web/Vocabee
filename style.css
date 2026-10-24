@@ -242,7 +242,7 @@ body[data-bank="gsat"],button.card.bank.ac-gsat{--accent:var(--y);--accent-soft:
 
 /* ===== v5: blob faces, individual tab icons, consistent thick outlines ===== */
 :root{
-  --page:#FF9E2C;--bg:#f5ead6;--surface:#fffcf5;--ink:#1a1a1a;--muted:#6b5e50;--line:#d9c9a8;
+  --page:#FF9500;--bg:#f5ead6;--surface:#fffcf5;--ink:#1a1a1a;--muted:#6b5e50;--line:#d9c9a8;
   --blue:#2347f0;--yellow:#ffd200;--red:#ff3b1d;--green:#00b856;--pink:#ff6b9d;--orange:#ff8c1a;
   --accent:#2347f0;--accent-soft:#dde4ff;--accent-ink:#fff;
   --good:#00a34a;--good-soft:#d8f5e3;--bad:#e5270e;--bad-soft:#ffe0da;--warn:#d98e00;
@@ -479,11 +479,11 @@ body[data-bank] .mode:disabled{opacity:.55}
 body[data-bank] .chip.on{background:var(--yellow);color:#1a1a1a;border-color:#1a1a1a}
 
 /* ===== one orange everywhere (same as the home page) ===== */
-:root{--red:#FF9E2C;--orange:#FF9E2C;--accent:#FF9E2C;--accent-soft:#FFE3D3}
-body[data-bank]{--accent:#FF9E2C;--accent-soft:#FFE3D3;--accent-ink:#fff}
+:root{--red:#FF9500;--orange:#FF9500;--accent:#FF9500;--accent-soft:#FFE3D3}
+body[data-bank]{--accent:#FF9500;--accent-soft:#FFE3D3;--accent-ink:#fff}
 
 /* error / warning colors use the same orange; text inputs match the other fields */
-:root,body[data-bank]{--bad:#FF9E2C;--bad-soft:#FFE3D3;--warn:#FF9E2C}
+:root,body[data-bank]{--bad:#FF9500;--bad-soft:#FFE3D3;--warn:#FF9500}
 input[type=text],input[type=search]{max-width:150px;min-width:0;border:2.5px solid #1a1a1a;border-radius:14px;background:var(--surface);font:inherit;padding:8px 10px;color:var(--ink)}
 
 /* ===== compact multiple-choice question so the answer card fits on screen ===== */
@@ -605,3 +605,7 @@ body.in-session #app{padding-top:0}
 @keyframes beebob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 @keyframes tappulse{0%,100%{opacity:.5;transform:translateY(0)}50%{opacity:1;transform:translateY(-2px)}}
 @media (prefers-reduced-motion:reduce){.vland-beesbtn,.vland-tap{animation:none}}
+
+/* landing: one fixed screen, no scrolling */
+html[data-view="landing"],html[data-view="landing"] body{overflow:hidden;height:100%;overscroll-behavior:none}
+html[data-view="landing"] .vland{min-height:0;height:calc(100dvh - 10px - 24px - env(safe-area-inset-top))}
