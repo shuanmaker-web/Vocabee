@@ -253,9 +253,9 @@ function render() {
 const starPts = (n, ro, ri) => Array.from({ length: n * 2 }, (_, i) => { const r = i % 2 ? ri : ro, a = -Math.PI / 2 + i * Math.PI / n; return (12 + r * Math.cos(a)).toFixed(2) + ',' + (12.4 + r * Math.sin(a)).toFixed(2); }).join(' ');
 const STAR5 = starPts(5, 11, 4.8), STAR8 = starPts(8, 11.5, 6.6);
 const TROPHY = '<g class="trophy"><path d="M7.5 3.5h9v6a4.5 4.5 0 0 1-9 0z"/><path class="hd" d="M7.5 5.5H4.6v1.8a3 3 0 0 0 3 3M16.5 5.5h2.9v1.8a3 3 0 0 1-3 3"/><rect x="10.8" y="13.6" width="2.4" height="3.4"/><rect x="7.8" y="17" width="8.4" height="3.4" rx="1"/><path class="sh" d="M10 6.2v3"/></g>';
-// honey jar: round belly, tapered neck, wide mouth with honey overflowing in three drips. lv 1 = pale (little honey), lv 2 = golden (full)
-const JAR_BODY = 'M7 5.6C7 8 3.6 9.4 3.6 14.6C3.6 19 7.2 21.4 12 21.4C16.8 21.4 20.4 19 20.4 14.6C20.4 9.4 17 8 17 5.6';
-const POT = lv => `<g class="hjar l${lv}"><path class="cb" d="${JAR_BODY}z"/><path class="jo" d="${JAR_BODY}"/><path class="sh" d="M5.9 14.2c.1-2 1-3.4 2.3-4.3"/><rect class="tp" x="5.4" y="2.8" width="13.2" height="2.8" rx="1.3"/><ellipse class="pool" cx="12" cy="3.2" rx="5.6" ry="1.3"/><path class="dr" d="M7.4 5.3v6.8a1.4 1.4 0 0 0 2.8 0V5.3z"/><path class="dr" d="M13.7 5.3v9.4a1.55 1.55 0 0 0 3.1 0V5.3z"/><path class="dr" d="M10.9 5.3v3.5a1.1 1.1 0 0 0 2.2 0V5.3z"/></g>`;
+// honey pot: round belly, cream rim, one honey drip down the front and a short dipper. lv 1 = pale (little honey), lv 2 = golden (full)
+const POT_BODY = 'M5.2 8.4C2.3 10.4 1.6 14.4 3.4 17.6C5 20.4 8.4 21.5 12 21.5C15.6 21.5 19 20.4 20.6 17.6C22.4 14.4 21.7 10.4 18.8 8.4';
+const POT = lv => `<g class="hjar l${lv}"><path class="cb" d="${POT_BODY}z"/><path class="sd" d="M19.9 10.8c1.1 3 .7 5.9-1.1 8-1.6 1.8-3.9 2.5-6.1 2.6 3.9-.9 6.3-3.8 6.5-7.2z"/><path class="jo" d="${POT_BODY}"/><ellipse class="rim" cx="12" cy="7.4" rx="7.6" ry="2.9"/><ellipse class="op" cx="12" cy="7.5" rx="5.4" ry="1.55"/><path class="stk" d="M12.4 6.4L18.4 1.7"/><ellipse class="hd" cx="11" cy="6.3" rx="2.1" ry="1.25" transform="rotate(-25 11 6.3)"/><path class="dr" d="M7.6 8.6Q10.6 9.6 11.2 8.8V14a1.4 1.4 0 0 1-2.8 0V10.8Q8.2 9.6 7.6 8.6z"/></g>`;
 const starCell = (k, n, cls, lv) => {
   const shape = cls.includes('exday') ? TROPHY : lv > 0 ? POT(lv) : '<circle class="c" cx="12" cy="12" r="9.5"/>';
   const mark = cls.includes('today') ? (lv > 0 ? '' : '<circle class="dot" cx="12" cy="12.6" r="3.4"/>') : '';
@@ -418,7 +418,7 @@ function applyTheme() {
   const mc = S.bank ? c : LAND;
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = mc;
 }
-const APP_VERSION = 'v13';
+const APP_VERSION = 'v14';
 function renderSettings() {
   const s = S.settings;
   const days = s.lastBackupAt ? Math.floor((Date.now() - s.lastBackupAt) / DAY) : null;
