@@ -211,6 +211,8 @@ function checkSpelling(input, w) {
   const norm = s => s.trim().toLowerCase().replace(/\s+/g, ' ');
   const user = norm(input), opts = answers(w).map(norm);
   if (opts.includes(user)) return { kind: 'ok', best: answers(w)[opts.indexOf(user)], user };
+  const compact = t => t.replace(/ /g, ''), sp = opts.findIndex(o => o !== user && compact(o) === compact(user));
+  if (sp >= 0) return { kind: 'space', best: answers(w)[sp], user, nwords: opts[sp].split(' ').length, flags: editOps(user, opts[sp]).flags }; // right letters, wrong spacing
   let best = null;
   for (const [i, o] of opts.entries()) { const r = editOps(user, o); if (!best || r.dist < best.dist) best = { ...r, target: answers(w)[i] }; }
   const close = best.dist === 1 && best.target.length >= 4;
@@ -251,9 +253,14 @@ function render() {
 const starPts = (n, ro, ri) => Array.from({ length: n * 2 }, (_, i) => { const r = i % 2 ? ri : ro, a = -Math.PI / 2 + i * Math.PI / n; return (12 + r * Math.cos(a)).toFixed(2) + ',' + (12.4 + r * Math.sin(a)).toFixed(2); }).join(' ');
 const STAR5 = starPts(5, 11, 4.8), STAR8 = starPts(8, 11.5, 6.6);
 const TROPHY = '<g class="trophy"><path d="M7.5 3.5h9v6a4.5 4.5 0 0 1-9 0z"/><path class="hd" d="M7.5 5.5H4.6v1.8a3 3 0 0 0 3 3M16.5 5.5h2.9v1.8a3 3 0 0 1-3 3"/><rect x="10.8" y="13.6" width="2.4" height="3.4"/><rect x="7.8" y="17" width="8.4" height="3.4" rx="1"/><path class="sh" d="M10 6.2v3"/></g>';
+const JAR = 'M6.4 7.6h11.2a2 2 0 0 1 2 2v8.2a3.4 3.4 0 0 1-3.4 3.4H7.8a3.4 3.4 0 0 1-3.4-3.4V9.6a2 2 0 0 1 2-2z';
+const HONEY_HALF = 'M4.4 14.2h15.2v3.6a3.4 3.4 0 0 1-3.4 3.4H7.8a3.4 3.4 0 0 1-3.4-3.4z';
+// honey pot: lv 1 = half full, lv 2 = full, with a drip, a shine and a happy face
+const POT = lv => `<g class="pot"><path class="jar" d="${JAR}"/><path class="honey" d="${lv > 1 ? JAR : HONEY_HALF}"/>${lv > 1 ? '<path class="honey" d="M8.6 7.6v2.7a1.2 1.2 0 0 0 2.4 0V7.6z"/><path class="sh" d="M6.9 10.6v3"/>' : ''}<path class="jo" d="${JAR}"/><rect class="lid" x="6" y="3.2" width="12" height="4.2" rx="1.7"/><circle class="eye" cx="9.6" cy="16" r=".95"/><circle class="eye" cx="14.4" cy="16" r=".95"/><path class="sm" d="M10.4 17.7q1.6 1.5 3.2 0"/></g>`;
 const starCell = (k, n, cls, lv) => {
-  const shape = cls.includes('exday') ? TROPHY : lv > 0 ? `<polygon class="st" points="${STAR5}" stroke-linejoin="round"/>` : '<circle class="c" cx="12" cy="12" r="9.5"/>';
-  return `<i class="${cls}" title="${k}${n == null ? '' : ': ' + n}"${lv == null ? '' : ` data-l="${lv}"`}><svg viewBox="0 0 24 24" aria-hidden="true">${shape}${cls.includes('today') ? '<circle class="dot" cx="12" cy="12.6" r="3.4"/>' : ''}</svg></i>`;
+  const shape = cls.includes('exday') ? TROPHY : lv > 0 ? POT(lv) : '<circle class="c" cx="12" cy="12" r="9.5"/>';
+  const mark = cls.includes('today') ? (lv > 0 ? '<rect class="tdy" x="7" y="22.1" width="10" height="1.7" rx=".85"/>' : '<circle class="dot" cx="12" cy="12.6" r="3.4"/>') : '';
+  return `<i class="${cls}" title="${k}${n == null ? '' : ': ' + n}"${lv == null ? '' : ` data-l="${lv}"`}><svg viewBox="0 0 24 24" aria-hidden="true">${shape}${mark}</svg></i>`;
 };
 function examLine() {
   const e = S.settings.examDate; if (!e) return '';
@@ -375,6 +382,10 @@ function renderProgress() {
     }
     html += `<section class="card"><h2>${BANKS[bank].name}</h2><div class="stat-grid" style="margin-top:8px">
       <div class="stat pstat"><b>${learned}</b><span>已學 / ${ws.length}</span></div><div class="stat pstat"><b>${mastered}</b><span>已精熟 / ${ws.length}</span></div><div class="stat pstat"><b>${due}</b><span>待複習</span></div></div>`;
+    if (BANKS[bank].levels) {
+      const tot = ws.length, pctL = Math.round(learned / tot * 100), wm = mastered / tot * 100, wl = Math.max(0, learned - mastered) / tot * 100;
+      html += `<div class="ov-wrap"><div class="row between"><b>整體進度</b><span class="muted small">核心 + 基礎 · 已學 ${learned} / ${tot}</span></div><div class="pbar ov" role="img" aria-label="整體已學 ${pctL}%"><i class="om" style="width:${wm}%"></i><i class="ol" style="width:${wl}%"></i><em>${pctL}%</em></div></div>`;
+    }
     if (BANKS[bank].levels) html += '<div style="margin-top:12px">' + Object.keys(byLv).sort().map(l => { const v = byLv[l]; const seg = c => c > 0 ? Math.max(4, c / v.n * 100) : 0; return `<div class="lvl"><span>${LVLABELS[l] || ('L' + l)}</span><div class="track"><i class="m" style="width:${seg(v.m)}%"></i><i class="l" style="width:${seg(v.l - v.m)}%"></i></div><span class="muted small">${v.l}/${v.n}</span></div>`; }).join('') + '</div>';
     html += '<p class="small muted">已學 = 選擇題、拼字 都答過;精熟 = 拼字答對過 且 記憶穩定度 ≥ 21 天。深色＝精熟,淺色＝已學未精熟;右側數字為已學／該級總數</p></section>';
   }
@@ -401,13 +412,14 @@ function renderProgress() {
 }
 
 const THEMES = { orange: ['琥珀', '#FF9500'], blue: ['藍', '#3D8BFF'], purple: ['紫', '#9B6BFF'], pink: ['粉', '#FF4F9A'], teal: ['青', '#12B8CC'] };
-const BRAND = '#FF9500';
+const BRAND = '#FF9500', LAND = '#E56A00';
 function applyTheme() {
   const c = S.bank ? (THEMES[S.settings.theme] || THEMES.orange)[1] : BRAND;
   document.documentElement.style.setProperty('--page', c);
-  const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = c;
+  const mc = S.bank ? c : LAND;
+  const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = mc;
 }
-const APP_VERSION = 'v3';
+const APP_VERSION = 'v4';
 function renderSettings() {
   const s = S.settings;
   const days = s.lastBackupAt ? Math.floor((Date.now() - s.lastBackupAt) / DAY) : null;
@@ -493,6 +505,37 @@ function renderSession() {
 const exBlock = w => w.ex ? `<div class="ex">${esc(w.ex)}${w.exzh ? `<br><span>${esc(w.exzh)}</span>` : ''}</div>` : '';
 const speakBtn = w => `<button class="icon-btn" data-speak="${esc(w.w)}" aria-label="發音">🔊</button>`;
 
+
+/* ---------- verb forms drill (過去式 / 過去分詞) ---------- */
+const vfFor = w => (window.VerbForms && window.VerbForms.forms(w)) || null;
+function vfState(w) {
+  const s = S.session, f = vfFor(w); if (!f) return null;
+  if (!s.vf || s.vf.id !== w.id) s.vf = { id: w.id, f, done: false, res: null };
+  return s.vf;
+}
+const vfPending = w => { const v = vfState(w); return !!v && !v.done; };
+const VF_ROWS = [['past', '過去式'], ['pp', '過去分詞']];
+function vfBlock(w) {
+  const v = vfState(w); if (!v) return '';
+  const head = `<div class="vf-h"><b>動詞三態</b><span class="muted small">原形 <b>${esc(v.f.base)}</b> → 過去式 → 過去分詞</span></div>`;
+  if (!v.done) {
+    return `<form id="vf-form" class="card vf" autocomplete="off">${head}${VF_ROWS.map(([k, lab]) => `<div class="vf-row"><span class="vf-lab">${lab}</span>
+      <div class="vf-btns">${[['same', 'same'], ['ed', '-ed'], ['d', '-d']].map(([x, t]) => `<button type="button" class="vfb" data-vfrow="${k}" data-vfsfx="${x}">${t}</button>`).join('')}</div>
+      <input class="field" data-vfin="${k}" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="輸入${lab}" aria-label="${lab}"></div>`).join('')}
+      <div class="row" style="margin-top:12px"><button type="button" class="btn ghost" data-vfact="skip">跳過</button><button class="btn grow" type="submit">檢查三態</button></div></form>`;
+  }
+  if (!v.res) return '';
+  return `<div class="card vf done">${head}${VF_ROWS.map(([k, lab]) => { const r = v.res[k]; return `<div class="vf-res ${r.ok ? 'ok' : 'no'}"><span class="vf-lab">${lab}</span><span class="vf-ans">${r.ok ? '✓' : '✗'} <b>${esc(r.user)}</b></span>${r.ok ? '' : `<span class="small">正確:<b class="good">${esc(v.f[k].join(' / '))}</b></span>`}</div>`; }).join('')}
+    <div class="vf-sum">${esc(v.f.base)} – ${esc(v.f.past[0])} – ${esc(v.f.pp[0])}</div></div>`;
+}
+async function vfCheck(past, pp) {
+  const s = S.session, w = curWord(), v = vfState(w); if (!v) return;
+  const norm = x => x.trim().toLowerCase().replace(/\s+/g, ' ');
+  v.res = { past: { user: norm(past), ok: v.f.past.includes(norm(past)) }, pp: { user: norm(pp), ok: v.f.pp.includes(norm(pp)) } };
+  v.done = true; render();
+  try { await store.addLog({ ts: Date.now(), cardId: cardId(s.bank, w.id, 'vform'), rating: v.res.past.ok && v.res.pp.ok ? 3 : 1, source: 'vform', wid: w.id, past: norm(past), pp: norm(pp), correct: v.res.past.ok && v.res.pp.ok }); } catch (e) { /* ignore */ }
+}
+
 function renderFlash(head, w) {
   const s = S.session;
   let body = `<div class="card q"><div class="word">${esc(w.w)}</div><div class="pos">${esc(w.pos || '')}</div><div style="margin-top:10px">${speakBtn(w)}</div>`;
@@ -518,22 +561,23 @@ function renderMcq(head, w) {
     const hit = q.picked === i && o.id === w.id;
     return `<button class="opt ${cls}${hit ? ' picked' : ''}" data-pick="${i}" ${q.picked !== null ? 'disabled' : ''}><span>${esc(q.reverse ? o.w : o.zh)}</span>${hit ? '<b class="opt-tag">✓ 正確</b>' : ''}</button>`;
   }).join('')}</div>`;
-  if (q.picked !== null) body += `<div class="card" style="margin-top:12px"><b>${esc(w.w)}</b> ${esc(w.pos || '')} — ${esc(w.zh)}${exBlock(w)}</div><button class="btn block" style="margin-top:12px" data-act="next">下一題</button>`;
+  if (q.picked !== null) body += `<div class="card" style="margin-top:12px"><b>${esc(w.w)}</b> ${esc(w.pos || '')} — ${esc(w.zh)}${exBlock(w)}</div>${vfBlock(w)}<button class="btn block" style="margin-top:12px" data-act="next" ${vfPending(w) ? 'disabled' : ''}>下一題</button>`;
   app.innerHTML = head + body;
 }
 
 function renderSpell(head, w) {
   const s = S.session, r = s.spellResult;
-  let body = `<div class="card q"><div class="muted small">請拼出這個字</div><div class="zh">${esc(w.zh)}</div><div class="pos">${esc(w.pos || '')}${w.w.includes('/') ? '' : ` · ${w.w.length} 個字母`}</div><div style="margin-top:10px">${speakBtn(w)}</div>${s.hint ? `<div class="pos" style="margin-top:6px">提示:${esc(w.w[0])}${'・'.repeat(Math.max(0, answers(w)[0].length - 1))}</div>` : ''}</div>`;
+  let body = `<div class="card q"><div class="muted small">請拼出這個字</div><div class="zh">${esc(w.zh)}</div><div class="pos">${esc(w.pos || '')}${w.w.includes('/') ? '' : w.w.includes(' ') ? ` · ${w.w.split(' ').length} 個字的片語 · ${w.w.replace(/ /g, '').length} 個字母` : ` · ${w.w.length} 個字母`}</div><div style="margin-top:10px">${speakBtn(w)}</div>${s.hint ? `<div class="pos" style="margin-top:6px">提示:${esc(w.w[0])}${'・'.repeat(Math.max(0, answers(w)[0].length - 1))}</div>` : ''}</div>`;
   if (!r) {
     body += `<form id="spell-form" style="margin-top:14px" autocomplete="off"><input class="field" id="spell-in" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="輸入英文" aria-label="拼字答案"><div class="row" style="margin-top:12px"><button type="button" class="btn ghost" data-act="hint" ${s.hint ? 'disabled' : ''}>提示</button><button type="button" class="btn ghost" data-act="giveup">不會</button><button class="btn grow" type="submit">送出</button></div></form>`;
   } else {
-    const shown = r.flags ? [...r.user].map((ch, i) => `<span class="${r.flags[i] ? 'good' : 'x'}">${esc(ch)}</span>`).join('') : '';
+    const shown = r.flags ? [...r.user].map((ch, i) => `<span class="${r.flags[i] ? 'good' : 'x'}">${esc(ch === ' ' && !r.flags[i] ? '␣' : ch)}</span>`).join('') : '';
+    const target = esc(w.w.split('/').join(' / ')), targetHtml = r.kind === 'space' && r.nwords > 1 ? target.replace(/ /g, '<span class="sp">␣</span>') : target;
     body += `<div class="card" style="margin-top:14px;text-align:center">
-      ${r.kind === 'ok' ? `<div class="verdict ok">✓ 正確!</div>` : r.kind === 'typo' ? `<div class="verdict half">差一點!有一個字母不對</div>` : `<div class="verdict no">${r.gaveUp ? '正確答案' : '✗ 再記一次'}</div>`}
+      ${r.kind === 'ok' ? `<div class="verdict ok">✓ 正確!</div>` : r.kind === 'typo' ? `<div class="verdict half">差一點!有一個字母不對</div>` : r.kind === 'space' ? `<div class="verdict half">差一點!${r.nwords > 1 ? `這是 ${r.nwords} 個字的片語,字與字中間要空一格` : '這個字中間不需要空格'}</div>` : `<div class="verdict no">${r.gaveUp ? '正確答案' : '✗ 再記一次'}</div>`}
       ${r.kind !== 'ok' && r.user ? `<div class="muted small">你的答案</div><div class="diff">${shown}</div>` : ''}
-      <div class="muted small">正確拼法</div><div class="diff"><span class="good">${esc(w.w.split('/').join(' / '))}</span></div>${exBlock(w)}</div>
-      <button class="btn block" style="margin-top:12px" data-act="next">下一題</button>`;
+      <div class="muted small">正確拼法</div><div class="diff"><span class="good">${targetHtml}</span></div>${exBlock(w)}</div>
+      ${vfBlock(w)}<button class="btn block" style="margin-top:12px" data-act="next" ${vfPending(w) ? 'disabled' : ''}>下一題</button>`;
   }
   app.innerHTML = head + body;
   const inp = $('#spell-in'); if (inp) inp.focus({ preventScroll: true });
@@ -550,7 +594,7 @@ async function answerCurrent(rating, extra = {}) {
   const s = S.session, w = curWord(); await grade(s.bank, w.id, s.mode, rating, { wid: w.id, ...extra });
   s.results.push({ wid: w.id, rating });
   if (rating === 1 && !s.practice && s.queue.length - s.pos < 40) { const at = Math.min(s.queue.length, s.pos + 4); s.queue.splice(at, 0, w.id); s.total++; } // see it again soon
-  s.pos++; s.revealed = false; s.q = null; s.spellResult = null; s.hint = false; render();
+  s.pos++; s.revealed = false; s.q = null; s.spellResult = null; s.hint = false; s.vf = null; render();
 }
 
 /* ---------- exercise questions (教材練習題本) ---------- */
@@ -703,6 +747,8 @@ document.addEventListener('click', async e => {
   if (t.dataset.speak) return speak(t.dataset.speak);
   if (t.dataset.level) { const l = +t.dataset.level, a = S.settings.levels; S.settings.levels = a.includes(l) ? a.filter(x => x !== l) : [...a, l].sort(); await saveSettings(); return render(); }
   const s = S.session; if (!s) return;
+  if (t.dataset.vfsfx !== undefined) { const v = s.vf, inp = $(`[data-vfin="${t.dataset.vfrow}"]`); if (v && inp) { const x = t.dataset.vfsfx; inp.value = v.f.base + (x === 'ed' ? 'ed' : x === 'd' ? 'd' : ''); inp.focus(); } return; }
+  if (t.dataset.vfact === 'skip') { if (s.vf) { s.vf.done = true; s.vf.res = null; } return render(); }
   if (s.kind === 'ex') return exClick(t, s);
   if (t.dataset.rate) return answerCurrent(+t.dataset.rate);
   if (t.dataset.pick !== undefined && s.q && s.q.picked === null) {
@@ -712,13 +758,14 @@ document.addEventListener('click', async e => {
   switch (t.dataset.act) {
     case 'quit': if (!s.results.length || s.pos >= s.queue.length || confirm('要離開嗎?已完成的題目會保留。')) endSession(); break;
     case 'reveal': s.revealed = true; render(); break;
-    case 'next': if (s.mode === 'mcq') { const q = s.q; await answerCurrent(q.result ? (q.ms < 2500 ? 4 : 3) : 1, { ms: q.ms, correct: q.result }); } else if (s.mode === 'spell') { const r = s.spellResult; await answerCurrent(r.kind === 'ok' ? (s.hintUsed ? 2 : 3) : r.kind === 'typo' ? 2 : 1, { answer: r.user, correct: r.kind === 'ok' }); s.hintUsed = false; } break;
+    case 'next': if (s.mode === 'mcq') { const q = s.q; await answerCurrent(q.result ? (q.ms < 2500 ? 4 : 3) : 1, { ms: q.ms, correct: q.result }); } else if (s.mode === 'spell') { const r = s.spellResult; await answerCurrent(r.kind === 'ok' ? (s.hintUsed ? 2 : 3) : (r.kind === 'typo' || r.kind === 'space') ? 2 : 1, { answer: r.user, correct: r.kind === 'ok' }); s.hintUsed = false; } break;
     case 'hint': s.hint = true; s.hintUsed = true; { const v = $('#spell-in')?.value; renderSpell(document.querySelector('.topbar').outerHTML, curWord()); if ($('#spell-in')) $('#spell-in').value = v || ''; } break;
     case 'giveup': s.spellResult = { kind: 'wrong', user: '', best: curWord().w, gaveUp: true }; render(); break;
     case 'again': startSession(s.bank, s.mode, s.practice); break;
   }
 });
 document.addEventListener('submit', e => {
+  if (e.target.id === 'vf-form') { e.preventDefault(); const a = $('[data-vfin="past"]'), b = $('[data-vfin="pp"]'); if (!a.value.trim()) return a.focus(); if (!b.value.trim()) return b.focus(); vfCheck(a.value, b.value); return; }
   if (e.target.id === 'ex-form') { e.preventDefault(); const v = $('#ex-in').value; if (!v.trim()) return; const s = S.session, q = qById[s.queue[s.pos]]; s.cur.fill = checkFill(v, q.ans); exAnswer(s.cur.fill.kind === 'ok', { answer: v.trim() }); return; }
   if (e.target.id !== 'spell-form') return; e.preventDefault();
   const s = S.session, v = $('#spell-in').value; if (!v.trim()) return;
@@ -726,6 +773,7 @@ document.addEventListener('submit', e => {
 });
 document.addEventListener('keydown', e => {
   const s = S.session; if (!s) return;
+  if (e.target.closest && e.target.closest('#vf-form')) return; // typing in the verb-form boxes
   if (s.kind === 'ex') { if (e.key === 'Enter' && s.cur?.result !== null && s.cur) { e.preventDefault(); $('[data-xact="next"]')?.click(); } return; }
   if (e.key === 'Enter' && s.mode === 'spell' && s.spellResult) { e.preventDefault(); $('[data-act="next"]')?.click(); }
   else if (s.mode === 'flash' && !s.revealed && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); s.revealed = true; render(); }

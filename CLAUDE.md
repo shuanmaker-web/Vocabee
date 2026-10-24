@@ -5,6 +5,7 @@ Mobile-first PWA for **junior-high (國中)** English vocabulary (字卡 FSRS �
 from the same engine. Built by a teacher ("shuanmaker") for students, used on phones.
 One bank: `data/jhs.json` (1,364 words), two tiers — **核心 (lv1)** and **基礎 (lv2)**.
 Read `README.md` for the data format and credits.
+`verbs.js` generates 過去式/過去分詞 for the verb-forms drill (irregular table + regular rules).
 
 ## Live site
 - **Student URL:** https://shuanmaker-web.github.io/vocabee/
@@ -51,7 +52,6 @@ server, unrecoverable if corrupted. Keep any change to data shape, storage keys,
 ## Conventions
 - **Keep asset paths relative** (served from `/vocabee/` sub-path); `manifest` uses `./`.
 - Single bank is driven by `BANKS` (one entry with `levels:[1,2]`) + `LVLABELS`. New words are
-  served in random order (avoids always starting at A). Theme color is `--page` (default amber
-  `#FF9E2C`, THEMES.orange). No landing page / no practice-question bank (removed vs Vocaboo).
+  served in random order (avoids always starting at A). Theme color is `--page` (default `#FF9500`, THEMES.orange; Vocaboo uses `#FF5700`). Landing is a full-bleed darker orange (`--land` `#E56A00`). No landing page / no practice-question bank (removed vs Vocaboo).
 - Data source: 翰霖文教《國中基礎單字》(han-lin.tw) — non-commercial educational use, credited
   in Settings → 關於與致謝. Keep that attribution.
