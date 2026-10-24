@@ -255,7 +255,7 @@ const STAR5 = starPts(5, 11, 4.8), STAR8 = starPts(8, 11.5, 6.6);
 const TROPHY = '<g class="trophy"><path d="M7.5 3.5h9v6a4.5 4.5 0 0 1-9 0z"/><path class="hd" d="M7.5 5.5H4.6v1.8a3 3 0 0 0 3 3M16.5 5.5h2.9v1.8a3 3 0 0 1-3 3"/><rect x="10.8" y="13.6" width="2.4" height="3.4"/><rect x="7.8" y="17" width="8.4" height="3.4" rx="1"/><path class="sh" d="M10 6.2v3"/></g>';
 // honey pot: round belly, cream rim, one honey drip down the front and a short dipper. lv 1 = pale (little honey), lv 2 = golden (full)
 // answered-day icon: the owner's honey-pot picture (icons/honey-l2.png = golden, honey-l1.png = pale)
-const POT = lv => `<image href="icons/honey-l${lv}.png" x="3.4" y="1.4" width="17.2" height="21.9"/>`;
+const POT = lv => `<image href="icons/honey-l${lv}.png" x="2.9" y="1.6" width="18.2" height="21.6"/>`;
 const starCell = (k, n, cls, lv) => {
   const shape = cls.includes('exday') ? TROPHY : lv > 0 ? POT(lv) : '<circle class="c" cx="12" cy="12" r="9.5"/>';
   const mark = cls.includes('today') ? (lv > 0 ? '' : '<circle class="dot" cx="12" cy="12.6" r="3.4"/>') : '';
