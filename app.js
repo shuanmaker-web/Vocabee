@@ -327,7 +327,6 @@ function renderLanding() {
         <img class="vland-bees" src="icons/landing-bees.png" alt="" draggable="false">
       </button>
       <p class="vland-sub">國中英文單字</p>
-      <p class="vland-tap">👆 點蜜蜂開始學習 🐝</p>
       ${store.volatile ? '<p class="small" style="color:var(--bad)"><b>⚠ 此瀏覽器無法儲存資料,關閉後進度會消失</b></p>' : ''}
     </div>`;
 }
@@ -409,7 +408,7 @@ function applyTheme() {
   document.documentElement.style.setProperty('--page', c);
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = c;
 }
-const APP_VERSION = 'v1';
+const APP_VERSION = 'v2';
 function renderSettings() {
   const s = S.settings;
   const days = s.lastBackupAt ? Math.floor((Date.now() - s.lastBackupAt) / DAY) : null;
