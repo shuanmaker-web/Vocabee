@@ -253,10 +253,10 @@ function render() {
 const starPts = (n, ro, ri) => Array.from({ length: n * 2 }, (_, i) => { const r = i % 2 ? ri : ro, a = -Math.PI / 2 + i * Math.PI / n; return (12 + r * Math.cos(a)).toFixed(2) + ',' + (12.4 + r * Math.sin(a)).toFixed(2); }).join(' ');
 const STAR5 = starPts(5, 11, 4.8), STAR8 = starPts(8, 11.5, 6.6);
 const TROPHY = '<g class="trophy"><path d="M7.5 3.5h9v6a4.5 4.5 0 0 1-9 0z"/><path class="hd" d="M7.5 5.5H4.6v1.8a3 3 0 0 0 3 3M16.5 5.5h2.9v1.8a3 3 0 0 1-3 3"/><rect x="10.8" y="13.6" width="2.4" height="3.4"/><rect x="7.8" y="17" width="8.4" height="3.4" rx="1"/><path class="sh" d="M10 6.2v3"/></g>';
-// honey can: a cylinder with two tape bands and a happy face. lv 1 = nearly empty (pale), lv 2 = full (golden honey on top)
-const CAN_BODY = 'M4.8 4.8V19.2a7.2 2.3 0 0 0 14.4 0V4.8';
-const CAN_BAND = y => `M4.8 ${y}a7.2 2.3 0 0 0 14.4 0v1.5a7.2 2.3 0 0 1-14.4 0z`;
-const POT = lv => `<g class="can l${lv}"><path class="cb" d="${CAN_BODY}z"/><path class="tp" d="${CAN_BAND(7.1)}"/><path class="tp" d="${CAN_BAND(15.3)}"/><path class="jo" d="${CAN_BODY}"/><ellipse class="ct" cx="12" cy="4.8" rx="7.2" ry="2.3"/>${lv > 1 ? '<ellipse class="pool" cx="12" cy="4.9" rx="5.2" ry="1.45"/><path class="sh" d="M7.1 11.7v2.6"/>' : ''}<circle class="eye" cx="9.8" cy="13.7" r=".9"/><circle class="eye" cx="14.2" cy="13.7" r=".9"/><path class="sm" d="M10.6 15.1q1.4 1.2 2.8 0"/></g>`;
+// honey pail: a tapered cylinder (wide top, narrow bottom) with a label band and a happy face. lv 1 = nearly empty (pale), lv 2 = full (golden honey on top)
+const CAN_BODY = 'M4.4 4.8L6 19.2a6 2.1 0 0 0 12 0L19.6 4.8';
+const CAN_BAND = y => { const k = 1.6 / 14.4, xl = 4.4 + (y - 4.8) * k, y2 = y + 1.5, xl2 = 4.4 + (y2 - 4.8) * k, f = n => n.toFixed(2); return `M${f(xl)} ${y}a${f(12 - xl)} 2.3 0 0 0 ${f(24 - 2 * xl)} 0L${f(24 - xl2)} ${y2}a${f(12 - xl2)} 2.3 0 0 1-${f(24 - 2 * xl2)} 0z`; };
+const POT = lv => `<g class="can l${lv}"><path class="cb" d="${CAN_BODY}z"/><path class="tp" d="${CAN_BAND(7.6)}"/><path class="jo" d="${CAN_BODY}"/><ellipse class="ct" cx="12" cy="4.8" rx="7.6" ry="2.4"/>${lv > 1 ? '<ellipse class="pool" cx="12" cy="4.9" rx="5.5" ry="1.5"/><path class="sh" d="M7.3 12.4v2.6"/>' : ''}<circle class="eye" cx="9.8" cy="14.2" r=".9"/><circle class="eye" cx="14.2" cy="14.2" r=".9"/><path class="sm" d="M10.6 15.8q1.4 1.2 2.8 0"/></g>`;
 const starCell = (k, n, cls, lv) => {
   const shape = cls.includes('exday') ? TROPHY : lv > 0 ? POT(lv) : '<circle class="c" cx="12" cy="12" r="9.5"/>';
   const mark = cls.includes('today') ? (lv > 0 ? '<rect class="tdy" x="7" y="22.4" width="10" height="1.5" rx=".75"/>' : '<circle class="dot" cx="12" cy="12.6" r="3.4"/>') : '';
@@ -419,7 +419,7 @@ function applyTheme() {
   const mc = S.bank ? c : LAND;
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = mc;
 }
-const APP_VERSION = 'v9';
+const APP_VERSION = 'v10';
 function renderSettings() {
   const s = S.settings;
   const days = s.lastBackupAt ? Math.floor((Date.now() - s.lastBackupAt) / DAY) : null;
