@@ -253,13 +253,13 @@ function render() {
 const starPts = (n, ro, ri) => Array.from({ length: n * 2 }, (_, i) => { const r = i % 2 ? ri : ro, a = -Math.PI / 2 + i * Math.PI / n; return (12 + r * Math.cos(a)).toFixed(2) + ',' + (12.4 + r * Math.sin(a)).toFixed(2); }).join(' ');
 const STAR5 = starPts(5, 11, 4.8), STAR8 = starPts(8, 11.5, 6.6);
 const TROPHY = '<g class="trophy"><path d="M7.5 3.5h9v6a4.5 4.5 0 0 1-9 0z"/><path class="hd" d="M7.5 5.5H4.6v1.8a3 3 0 0 0 3 3M16.5 5.5h2.9v1.8a3 3 0 0 1-3 3"/><rect x="10.8" y="13.6" width="2.4" height="3.4"/><rect x="7.8" y="17" width="8.4" height="3.4" rx="1"/><path class="sh" d="M10 6.2v3"/></g>';
-const JAR = 'M6.4 7.6h11.2a2 2 0 0 1 2 2v8.2a3.4 3.4 0 0 1-3.4 3.4H7.8a3.4 3.4 0 0 1-3.4-3.4V9.6a2 2 0 0 1 2-2z';
-const HONEY_HALF = 'M4.4 14.2h15.2v3.6a3.4 3.4 0 0 1-3.4 3.4H7.8a3.4 3.4 0 0 1-3.4-3.4z';
-// honey pot: lv 1 = half full, lv 2 = full, with a drip, a shine and a happy face
-const POT = lv => `<g class="pot"><path class="jar" d="${JAR}"/><path class="honey" d="${lv > 1 ? JAR : HONEY_HALF}"/>${lv > 1 ? '<path class="honey" d="M8.6 7.6v2.7a1.2 1.2 0 0 0 2.4 0V7.6z"/><path class="sh" d="M6.9 10.6v3"/>' : ''}<path class="jo" d="${JAR}"/><rect class="lid" x="6" y="3.2" width="12" height="4.2" rx="1.7"/><circle class="eye" cx="9.6" cy="16" r=".95"/><circle class="eye" cx="14.4" cy="16" r=".95"/><path class="sm" d="M10.4 17.7q1.6 1.5 3.2 0"/></g>`;
+// honey can: a cylinder with two tape bands and a happy face. lv 1 = nearly empty (pale), lv 2 = full (golden honey on top)
+const CAN_BODY = 'M4.8 4.8V19.2a7.2 2.3 0 0 0 14.4 0V4.8';
+const CAN_BAND = y => `M4.8 ${y}a7.2 2.3 0 0 0 14.4 0v1.5a7.2 2.3 0 0 1-14.4 0z`;
+const POT = lv => `<g class="can l${lv}"><path class="cb" d="${CAN_BODY}z"/><path class="tp" d="${CAN_BAND(7.1)}"/><path class="tp" d="${CAN_BAND(15.3)}"/><path class="jo" d="${CAN_BODY}"/><ellipse class="ct" cx="12" cy="4.8" rx="7.2" ry="2.3"/>${lv > 1 ? '<ellipse class="pool" cx="12" cy="4.9" rx="5.2" ry="1.45"/><path class="sh" d="M7.1 11.7v2.6"/>' : ''}<circle class="eye" cx="9.8" cy="13.7" r=".9"/><circle class="eye" cx="14.2" cy="13.7" r=".9"/><path class="sm" d="M10.6 15.1q1.4 1.2 2.8 0"/></g>`;
 const starCell = (k, n, cls, lv) => {
   const shape = cls.includes('exday') ? TROPHY : lv > 0 ? POT(lv) : '<circle class="c" cx="12" cy="12" r="9.5"/>';
-  const mark = cls.includes('today') ? (lv > 0 ? '<rect class="tdy" x="7" y="22.1" width="10" height="1.7" rx=".85"/>' : '<circle class="dot" cx="12" cy="12.6" r="3.4"/>') : '';
+  const mark = cls.includes('today') ? (lv > 0 ? '<rect class="tdy" x="7" y="22.4" width="10" height="1.5" rx=".75"/>' : '<circle class="dot" cx="12" cy="12.6" r="3.4"/>') : '';
   return `<i class="${cls}" title="${k}${n == null ? '' : ': ' + n}"${lv == null ? '' : ` data-l="${lv}"`}><svg viewBox="0 0 24 24" aria-hidden="true">${shape}${mark}</svg></i>`;
 };
 function examLine() {
@@ -419,7 +419,7 @@ function applyTheme() {
   const mc = S.bank ? c : LAND;
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = mc;
 }
-const APP_VERSION = 'v8';
+const APP_VERSION = 'v9';
 function renderSettings() {
   const s = S.settings;
   const days = s.lastBackupAt ? Math.floor((Date.now() - s.lastBackupAt) / DAY) : null;
