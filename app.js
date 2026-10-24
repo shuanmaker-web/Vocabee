@@ -418,7 +418,7 @@ function applyTheme() {
   const mc = S.bank ? c : LAND;
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = mc;
 }
-const APP_VERSION = 'v14';
+const APP_VERSION = 'v15';
 function renderSettings() {
   const s = S.settings;
   const days = s.lastBackupAt ? Math.floor((Date.now() - s.lastBackupAt) / DAY) : null;

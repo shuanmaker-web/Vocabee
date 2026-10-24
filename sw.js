@@ -1,5 +1,5 @@
 // Offline cache. Bump VERSION when files change so students get the update.
-const VERSION = 'v22';
+const VERSION = 'v23';
 const CORE = ['./', 'index.html', 'style.css', 'app.js', 'verbs.js', 'lib/ts-fsrs.umd.js', 'manifest.webmanifest', 'icons/favicon-64.png', 'icons/apple-touch-icon.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/tab1.png', 'icons/tab2.png', 'icons/tab3.png', 'icons/tab4.png', 'icons/logo.png', 'icons/landing-bees.png', 'icons/honey-l1.png', 'icons/honey-l2.png', 'data/jhs.json', 'data/questions.json'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

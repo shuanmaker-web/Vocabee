@@ -610,6 +610,38 @@ body.in-session #app{padding-top:0}
 html[data-view="landing"],html[data-view="landing"] body{overflow:hidden;height:100%;overscroll-behavior:none}
 html[data-view="landing"] .vland{min-height:0;height:calc(100dvh - 10px - 24px - env(safe-area-inset-top))}
 
+/* overall progress bar (核心 + 基礎) */
+.ov-wrap{margin-top:14px}
+.pbar.ov{height:26px;margin-top:6px}
+.pbar.ov .om{background:var(--accent)}
+.pbar.ov .ol{background:color-mix(in srgb,var(--accent) 42%,#fff)}
+.pbar.ov em{line-height:21px;font-size:.82rem;font-weight:800}
+
+/* landing: one full-bleed darker-orange screen (no beige panel, no border) */
+:root{--land:#E56A00}
+html[data-view="landing"],html[data-view="landing"] body{background:var(--land)!important}
+html[data-view="landing"] #app{max-width:none;margin:0;padding:0}
+html[data-view="landing"] .vland{height:100dvh;min-height:0;width:100%;background:var(--land);padding:calc(24px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom))}
+
+/* spelling: visible space marker for phrases */
+.diff .sp{color:var(--bad);font-weight:800;margin:0 1px}
+
+/* verb forms drill */
+.card.vf{margin-top:12px}
+.vf-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:8px}
+.vf-row{margin-top:10px}
+.vf-lab{display:block;font-weight:800;font-size:.9rem;margin-bottom:6px}
+.vf-btns{display:flex;gap:8px;margin-bottom:6px}
+.vfb{font:inherit;font-weight:800;font-size:.9rem;border:2px solid #1a1a1a;background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 16px;cursor:pointer;box-shadow:2px 2px 0 #1a1a1a}
+.vfb:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #1a1a1a}
+.vf-res{display:grid;gap:2px;padding:8px 0;border-top:1px dashed var(--line)}
+.vf-res:first-of-type{border-top:0}
+.vf-res.ok .vf-ans{color:var(--good)}.vf-res.no .vf-ans{color:var(--bad)}
+.vf-sum{margin-top:6px;padding-top:8px;border-top:1px solid var(--line);font-weight:800;text-align:center}
+button[data-act="next"][disabled]{opacity:.45}
+
+/* jars are drawn as big as the exam-day trophy */
+:is(.heat,.star-legend) i[data-l="1"] svg,:is(.heat,.star-legend) i[data-l="2"] svg{transform:scale(1.3);transform-origin:50% 55%}
 /* jars are drawn as big as the exam-day trophy */
 :is(.heat,.star-legend) i[data-l="1"] svg,:is(.heat,.star-legend) i[data-l="2"] svg{transform:scale(1.3);transform-origin:50% 55%}
 .heat{row-gap:5px}
